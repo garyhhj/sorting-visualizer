@@ -1,0 +1,34 @@
+body {
+    background-color: #383838;
+
+}
+
+.barContainer {
+    border: 10px;
+    border-color: red; 
+    width: 100%;
+    height: 80%;  
+
+    display: flex;
+    flex-direction: row; 
+}
+
+.bar {
+    border:2px; 
+    border-color: #ddd2c9;
+    background-color: #ddd2c9;
+    border-spacing: 20px;
+    border-radius: 10px; 
+    margin: 5px; 
+
+    width: 40px;
+    height: 80px;
+}
+
+.interface {
+    position: fixed; 
+    bottom: 0px; 
+    width: 100%;
+    height: 20%;
+}
+/*  another nice color #ddd2c9*/
