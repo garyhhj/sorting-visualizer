@@ -11,6 +11,8 @@ body {
 
     display: flex;
     flex-direction: row; 
+
+    transition: 200ms ease-in-out; 
 }
 
 .bar {
@@ -23,6 +25,7 @@ body {
 
     width: 10px;
     height: 80px;
+
 }
 
 .interface {

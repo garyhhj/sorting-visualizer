@@ -61,8 +61,86 @@ function reset(){
 /****************
  * sorting algo
  ****************/
-function sort(){
-    alert("sort"); 
+//const delay = ms => new Promise(res => setTimeout(res, ms));
+
+// function delay(ms){
+//     return new Promise(res => setTimeout(res, ms)); 
+// }
+
+function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function swap(lhs, rhs){
+    let bars = document.getElementsByClassName("bar"); 
+
+    bars[lhs].style.height = arr[rhs].toString() + "px"; 
+    bars[rhs].style.height = arr[lhs].toString() + "px"; 
+    
+    bars[lhs].style.backgroundColor = "lightGreen"; 
+    bars[rhs].style.backgroundColor = "lightGreen"; 
+    await sleep(10); 
+    bars[lhs].style.backgroundColor = "#ddd2c9";
+    bars[rhs].style.backgroundColor = "#ddd2c9";
+    //swaps two elements with index lhs and rhs and perform animation   
+    let temp = arr[lhs]; 
+    arr[lhs] = arr[rhs]; 
+    arr[rhs] = temp;   
+}
+
+// async function cmp(lhs, rhs){
+//     let bars = document.getElementsByClassName("bar"); 
+
+//     if(arr[lhs] < arr[rhs]){
+
+//         //adjust size 
+//         bars[lhs].style.height = arr[rhs].toString() + "px"; 
+//         bars[rhs].style.height = arr[lhs].toString() + "px"; 
+        
+//         bars[lhs].style.backgroundColor = "lightGreen"; 
+//         bars[rhs].style.backgroundColor = "lightGreen"; 
+//         await sleep(50); 
+//         bars[lhs].style.backgroundColor = "#ddd2c9";
+//         bars[rhs].style.backgroundColor = "#ddd2c9";
+
+//         //console.log("after 2000ms delay"); 
+//         await swap(lhs, rhs);
+    
+//     }
+//     else{
+//         bars[lhs].style.backgroundColor = "lightGreen"; 
+//         bars[rhs].style.backgroundColor = "lightGreen"; 
+//         await sleep(50); 
+//         bars[lhs].style.backgroundColor = "#ddd2c9";
+//         bars[rhs].style.backgroundColor = "#ddd2c9";
+//     }
+//     //console.log("end of cmp function"); 
+
+//     //await sleep(50); 
+//     //do some animation idk 
+
+//     //compare i and j and determine if need to swap or not and then animate 
+// }
+
+async function sort(){
+    //setTimeout(function() {console.log("timeout for 5s");},  5000); 
+
+    //alert("sort"); 
+    console.log("staring arr"); 
+    console.log(arr); 
+   
+    let arrSize = arr.length; 
+    for(let i = 0; i < arrSize; ++i){
+        for(let j = 0; j < arrSize - i - 1; ++j){
+            if(arr[j + 1] < arr[j]){
+                await swap(j + 1, j); 
+            }
+        }
+    }
+    
+
+    console.log("ending arr"); 
+    console.log(arr); 
 }
 
 /****************
@@ -71,12 +149,3 @@ function sort(){
 resetButton.addEventListener("click", reset); 
 sortButton.addEventListener("click", sort); 
 
-
-        // div.style.border = "2px";
-        // div.style.borderColor = "#ddd2c9" 
-        // div.style.backgroundColor = "#ddd2c9";
-        // div.style.borderSpacing = "20px"; 
-        // div.style.borderRadius = "10px"; 
-        // div.style.margin = "5px"; 
-        // div.style.width = "40px";  
-        // div.style.height = "80px";
