@@ -142,58 +142,65 @@ async function quickSort(lo, hi){
 /****************
  * merge sort  
  ****************/
-async function merge(lo, mid, hi){
+function merge(lo, mid, hi){
     let k; 
     let n1 = mid - lo + 1; 
     let n2 = hi - mid; 
+    //console.log("lo mid hi n1 n2", lo, " , ", mid , " , ", hi, " , ", n1, " , ", n2);
 
-    //how to get array of certain size in js 
-    let left = []; //this need something idk help 
-    let right = []; 
+  //how to get array of certain size in js 
 
+    let left = Array.apply(null, Array(n1)).map(function(){}); 
+    let right = Array.apply(null, Array(n2)).map(function(){}); 
+
+    //603708 
     for(let i = 0; i < n1; ++i){
-        left.push(arr[lo + i]); 
-        //left[i] = arr[lo + i]; 
+        //left.push(arr[lo + i]); 
+        left[i] = arr[lo + i]; 
     }
     for(let i = 0; i < n2; ++i){
-        right.push(arr[mid + 1 + i]); 
-        //right[i] = arr[mid + 1 + i];
+        //right.push(arr[mid + 1 + i]); 
+        right[i] = arr[mid + 1 + i];
     }
+    //console.log("left and right arr"); 
+    //console.log(left); 
+    //console.log(right); 
 
-    let i = 0; 
-    let j = 0; 
+    let i = 0;  //for left 
+    let j = 0;  //for right 
     k = lo; 
     while(i < n1 && j < n2){
         if(left[i] <= right[j]){
             arr[k] = left[i]; 
             ++i; 
-            ++k; 
         }
         else {
             arr[k] = right[j]; 
             ++j; 
-            ++k; 
         }
-    }
-
-    //remaining right side 
-    while(i < n1){
-        arr[k] = right[i]; 
-        ++i; 
         ++k; 
     }
 
     //remaining left side 
+    while(i < n1){
+        arr[k] = left[i]; 
+        ++i; 
+        ++k; 
+    }
+
+    //remaining right side 
     while(j < n2){
-        arr[k] = left[j]; 
+        arr[k] = right[j]; 
         ++j; 
         ++k; 
     }
+    //console.log(arr); 
 }
 
-async function mergeSort(lo, hi){
+function mergeSort(lo, hi){
     if(lo < hi){
-        let mid = lo + (hi - lo)/2; 
+        let mid = lo + Math.floor((hi - lo)/2); 
+        //console.log(lo, " , ", mid, " , ", hi , " low mid hi "); 
         mergeSort(lo, mid); 
         mergeSort(mid + 1, hi); 
         merge(lo, mid, hi); 
@@ -203,7 +210,7 @@ async function mergeSort(lo, hi){
 /****************
  * interface 
  ****************/
-async function sort(){
+function sort(){
     //setTimeout(function() {console.log("timeout for 5s");},  5000); 
 
     //alert("sort"); 
@@ -213,6 +220,12 @@ async function sort(){
     //await bubbleSort();     
     //await quickSort(0, arr.length - 1); 
     mergeSort(0, arr.length - 1);
+
+    //console.log("making arr with set size"); 
+    //let arr = [];
+    //let arr = Array.apply(null, Array(3)).map(function(){}); 
+    //console.log(arr); 
+
 
     console.log("ending arr"); 
     console.log(arr); 
