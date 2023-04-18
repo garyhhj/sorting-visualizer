@@ -143,6 +143,8 @@ async function quickSort(lo, hi){
  * merge sort  
  ****************/
 function merge(lo, mid, hi){
+    //maybe animate the first and last bar and middle bar? 
+
     let k; 
     let n1 = mid - lo + 1; 
     let n2 = hi - mid; 
@@ -165,6 +167,9 @@ function merge(lo, mid, hi){
     //console.log("left and right arr"); 
     //console.log(left); 
     //console.log(right); 
+
+
+    //need to animate the resizing of the bars here 
 
     let i = 0;  //for left 
     let j = 0;  //for right 
