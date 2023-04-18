@@ -52,6 +52,10 @@ function reset(){
 /****************
  * sorting algo
  ****************/
+
+/****************
+ * utility 
+ ****************/
 function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -81,14 +85,9 @@ async function swap(lhs, rhs){
     arr[rhs] = temp;   
 }
 
-
-
-// function swap(lhs, rhs){
-//     let temp = arr[lhs]; 
-//     arr[lhs] = arr[rhs]; 
-//     arr[rhs] = temp;   
-// }
-
+/****************
+ * bubble sort
+ ****************/
 async function bubbleSort(){
     
     let arrSize = arr.length; 
@@ -101,35 +100,15 @@ async function bubbleSort(){
     }
 }
 
-// async function partition(lo, hi) {
-    
-//     let pivot = arr[hi]; 
-//     let leftIndex = lo; 
-//     let rightIndex = hi - 1; 
-
-//     while(leftIndex <= rightIndex){
-//        if(arr[leftIndex] <= pivot){
-//             leftIndex += 1; 
-//        }
-//        else if(arr[rightIndex] >= pivot){
-//             rightIndex -= 1; 
-//        }
-//        else {
-//             await swap(leftIndex, rightIndex); 
-//             leftIndex += 1; 
-//             rightIndex += 1; 
-//        }
-//     }
-
-//     await swap(leftIndex, hi); 
-//     return leftIndex; 
-
-//     // await swap(hi, rightIndex); 
-//     // return rightIndex; 
-// }
-
+/****************
+ * quick sort 
+ ****************/
 async function partition(lo, hi){
     let pivot = arr[hi]; 
+    let bars = document.getElementsByClassName("bar");
+    bars[hi].style.backgroundColor = "red"; 
+
+
     let leftPtr = lo; 
     let rightPtr = hi - 1; 
 
@@ -148,6 +127,7 @@ async function partition(lo, hi){
     }
 
     await swap(leftPtr, hi); 
+    bars[leftPtr].style.backgroundColor = "#ddd2c9";
     return leftPtr; 
 }
 
@@ -159,6 +139,70 @@ async function quickSort(lo, hi){
     }
 }
 
+/****************
+ * merge sort  
+ ****************/
+async function merge(lo, mid, hi){
+    let k; 
+    let n1 = mid - lo + 1; 
+    let n2 = hi - mid; 
+
+    //how to get array of certain size in js 
+    let left = []; //this need something idk help 
+    let right = []; 
+
+    for(let i = 0; i < n1; ++i){
+        left.push(arr[lo + i]); 
+        //left[i] = arr[lo + i]; 
+    }
+    for(let i = 0; i < n2; ++i){
+        right.push(arr[mid + 1 + i]); 
+        //right[i] = arr[mid + 1 + i];
+    }
+
+    let i = 0; 
+    let j = 0; 
+    k = lo; 
+    while(i < n1 && j < n2){
+        if(left[i] <= right[j]){
+            arr[k] = left[i]; 
+            ++i; 
+            ++k; 
+        }
+        else {
+            arr[k] = right[j]; 
+            ++j; 
+            ++k; 
+        }
+    }
+
+    //remaining right side 
+    while(i < n1){
+        arr[k] = right[i]; 
+        ++i; 
+        ++k; 
+    }
+
+    //remaining left side 
+    while(j < n2){
+        arr[k] = left[j]; 
+        ++j; 
+        ++k; 
+    }
+}
+
+async function mergeSort(lo, hi){
+    if(lo < hi){
+        let mid = lo + (hi - lo)/2; 
+        mergeSort(lo, mid); 
+        mergeSort(mid + 1, hi); 
+        merge(lo, mid, hi); 
+    }
+}
+
+/****************
+ * interface 
+ ****************/
 async function sort(){
     //setTimeout(function() {console.log("timeout for 5s");},  5000); 
 
@@ -166,8 +210,9 @@ async function sort(){
     console.log("staring arr"); 
     console.log(arr); 
 
-    await bubbleSort();     
-    // await quickSort(0, arr.length - 1); 
+    //await bubbleSort();     
+    //await quickSort(0, arr.length - 1); 
+    mergeSort(0, arr.length - 1);
 
     console.log("ending arr"); 
     console.log(arr); 
