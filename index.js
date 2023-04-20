@@ -5,6 +5,19 @@
 const resetButton = document.querySelector("#reset"); 
 const sortButton = document.querySelector("#sort");
 
+const bubbleSortButton = document.querySelector("#bubbleSort"); 
+const quickSortButton = document.querySelector("#quickSort"); 
+const mergeSortButton = document.querySelector("#mergeSort"); 
+const heapSortButton = document.querySelector("#heapSort"); 
+
+var sortingMethod = 0; 
+const BUBBLESORT = 0; 
+const QUICKSORT = 1; 
+const MERGESORT = 2; 
+const HEAPSORT = 3; 
+
+
+
 let barContainer = document.getElementById("barContainer"); 
 let arr = []; 
 
@@ -66,8 +79,8 @@ async function swap(lhs, rhs){
     bars[lhs].style.height = arr[rhs].toString() + "px"; 
     bars[rhs].style.height = arr[lhs].toString() + "px"; 
     
-    bars[lhs].style.backgroundColor = "lightGreen"; 
-    bars[rhs].style.backgroundColor = "lightGreen"; 
+    bars[lhs].style.backgroundColor = "darkGreen"; 
+    bars[rhs].style.backgroundColor = "darkGreen"; 
     
     // try {
     //     let response = sleep(10);
@@ -75,7 +88,7 @@ async function swap(lhs, rhs){
     // catch(e){
     //     console.log(e); 
     // }
-    await sleep(10); 
+    await sleep(15); 
 
     bars[lhs].style.backgroundColor = "#ddd2c9";
     bars[rhs].style.backgroundColor = "#ddd2c9";
@@ -83,6 +96,21 @@ async function swap(lhs, rhs){
     let temp = arr[lhs]; 
     arr[lhs] = arr[rhs]; 
     arr[rhs] = temp;   
+}
+
+function swapS(lhs, rhs){
+    let temp = arr[lhs]; 
+    arr[lhs] = arr[rhs]; 
+    arr[rhs] = temp;   
+}
+
+async function animate(index, newHeight){
+    let bars = document.getElementsByClassName("bar"); 
+    bars[index].style.height = newHeight.toString() + "px"; 
+    bars[index].style.backgroundColor = "darkGreen"; 
+    await sleep(5); 
+
+    bars[index].style.backgroundColor = "#ddd2c9";
 }
 
 /****************
@@ -142,15 +170,20 @@ async function quickSort(lo, hi){
 /****************
  * merge sort  
  ****************/
-function merge(lo, mid, hi){
+async function merge(lo, mid, hi){
     //maybe animate the first and last bar and middle bar? 
+
+    let bars = document.getElementsByClassName("bar");
+    bars[lo].backgroundColor = "red"; 
+    bars[mid].backgroundColor = "red";
+    bars[hi].backgroundColor = "red"; 
 
     let k; 
     let n1 = mid - lo + 1; 
     let n2 = hi - mid; 
     //console.log("lo mid hi n1 n2", lo, " , ", mid , " , ", hi, " , ", n1, " , ", n2);
 
-  //how to get array of certain size in js 
+    //how to get array of certain size in js 
 
     let left = Array.apply(null, Array(n1)).map(function(){}); 
     let right = Array.apply(null, Array(n2)).map(function(){}); 
@@ -177,10 +210,12 @@ function merge(lo, mid, hi){
     while(i < n1 && j < n2){
         if(left[i] <= right[j]){
             arr[k] = left[i]; 
+            await animate(k, left[i]); 
             ++i; 
         }
         else {
             arr[k] = right[j]; 
+            await animate(k, right[j]);
             ++j; 
         }
         ++k; 
@@ -189,54 +224,148 @@ function merge(lo, mid, hi){
     //remaining left side 
     while(i < n1){
         arr[k] = left[i]; 
+        await animate(k, left[i]); 
         ++i; 
         ++k; 
     }
 
     //remaining right side 
     while(j < n2){
-        arr[k] = right[j]; 
+        arr[k] = right[j];
+        await animate(k, right[j]);  
         ++j; 
         ++k; 
     }
     //console.log(arr); 
 }
 
-function mergeSort(lo, hi){
+async function mergeSort(lo, hi){
     if(lo < hi){
         let mid = lo + Math.floor((hi - lo)/2); 
         //console.log(lo, " , ", mid, " , ", hi , " low mid hi "); 
-        mergeSort(lo, mid); 
-        mergeSort(mid + 1, hi); 
-        merge(lo, mid, hi); 
+        await mergeSort(lo, mid); 
+        await mergeSort(mid + 1, hi); 
+        await merge(lo, mid, hi); 
     }
 }
 
 /****************
+ * heap sort   
+ ****************/
+
+async function heapify(highestIndex, currIndex){
+    let leftIndex = 2 * currIndex + 1; 
+    let rightIndex = 2 * currIndex + 2; 
+    let largestIndex = currIndex; 
+
+    if(leftIndex < highestIndex && arr[leftIndex] > arr[largestIndex]){
+        largestIndex = leftIndex; 
+    }
+
+    if(rightIndex < highestIndex && arr[rightIndex] > arr[largestIndex]){
+        largestIndex = rightIndex; 
+    }
+
+    if(largestIndex != currIndex){
+        await swap(largestIndex, currIndex); 
+        await heapify(highestIndex, largestIndex); 
+    }
+}
+
+async function heapSort(){
+    //create max heap 
+    for(let i = Math.floor(arr.length / 2 - 1); i >= 0; --i){
+        await heapify(arr.length, i); 
+    }
+
+    //sort 
+    for(let i = arr.length - 1; i >= 0; --i){
+        await swap(0, i); 
+        await heapify(i, 0); 
+    }
+}
+
+
+/****************
  * interface 
  ****************/
-function sort(){
-    //setTimeout(function() {console.log("timeout for 5s");},  5000); 
+async function sort(){
 
-    //alert("sort"); 
     console.log("staring arr"); 
     console.log(arr); 
 
-    //await bubbleSort();     
-    //await quickSort(0, arr.length - 1); 
-    mergeSort(0, arr.length - 1);
+    if(sortingMethod === -1){
+        //
 
-    //console.log("making arr with set size"); 
-    //let arr = [];
-    //let arr = Array.apply(null, Array(3)).map(function(){}); 
-    //console.log(arr); 
+        return;
+    }
 
+    switch(sortingMethod){
+        case BUBBLESORT:
+            await bubbleSort();     
+            break; 
+        case QUICKSORT: 
+            await quickSort(0, arr.length - 1); 
+            break; 
+        case MERGESORT: 
+            await mergeSort(0, arr.length - 1);
+            break; 
+        case HEAPSORT: 
+            await heapSort(); 
+            break; 
+    }
 
     console.log("ending arr"); 
     console.log(arr); 
 
 }
 
+function initSort(sortAlgo){
+    console.log("init sort called"); 
+    sortingMethod = sortAlgo; 
+
+    let buttons = document.getElementsByTagName("button"); 
+    for(let i = 0; i < buttons.length; ++i){
+        console.log("clearing buttons color")
+        buttons[i].style.color = "aliceblue"; 
+    }
+
+    let sortMethodStr= "";
+    switch(sortingMethod){
+        case BUBBLESORT:
+            sortMethodStr = "bubbleSort";     
+            break; 
+        case QUICKSORT: 
+            sortMethodStr = "quickSort"; 
+            break; 
+        case MERGESORT: 
+            sortMethodStr = "mergeSort";
+            break; 
+        case HEAPSORT: 
+            sortMethodStr = "heapSort"; 
+            break; 
+    }
+
+    let button = document.getElementById(sortMethodStr); 
+    button.style.color = "aquamarine"; 
+
+}
+
+function initBubbleSort(){
+    initSort(BUBBLESORT); 
+}
+
+function initQuickSort(){
+    initSort(QUICKSORT); 
+}
+
+function initMergeSort(){
+    initSort(MERGESORT); 
+}
+
+function initHeapSort(){
+    initSort(HEAPSORT); 
+}
 
 /****************
  * events
@@ -244,3 +373,10 @@ function sort(){
 resetButton.addEventListener("click", reset); 
 sortButton.addEventListener("click", sort); 
 
+bubbleSortButton.addEventListener("click", initBubbleSort); 
+quickSortButton.addEventListener("click", initQuickSort);
+mergeSortButton.addEventListener("click", initMergeSort); 
+heapSortButton.addEventListener("click", initHeapSort); 
+
+
+//style some text and make it go away 
