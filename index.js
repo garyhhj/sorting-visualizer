@@ -16,8 +16,6 @@ const QUICKSORT = 1;
 const MERGESORT = 2; 
 const HEAPSORT = 3; 
 
-
-
 let barContainer = document.getElementById("barContainer"); 
 let arr = []; 
 
@@ -30,8 +28,6 @@ function getRandomArbitrary(min, max){
 
 function generateArr(number){
     arr = []; 
-    
-    //get bound for generation 
     const lo = 5;
     const hi = Math.floor(screen.height * 0.60);  
     console.log("screen height is ", lo, " " , hi); 
@@ -54,7 +50,6 @@ function reset(){
     generateArr(nBars); 
     for(let i = 0; i < nBars; ++i){
         //style the div 
-        //let div = document.createElement("div"); 
         let bar = document.createElement("div"); 
         bar.classList.add("bar");
         bar.style.height = arr[i] + "px";  
@@ -82,23 +77,10 @@ async function swap(lhs, rhs){
     bars[lhs].style.backgroundColor = "darkGreen"; 
     bars[rhs].style.backgroundColor = "darkGreen"; 
     
-    // try {
-    //     let response = sleep(10);
-    // }
-    // catch(e){
-    //     console.log(e); 
-    // }
     await sleep(15); 
 
     bars[lhs].style.backgroundColor = "#ddd2c9";
     bars[rhs].style.backgroundColor = "#ddd2c9";
-    //swaps two elements with index lhs and rhs and perform animation   
-    let temp = arr[lhs]; 
-    arr[lhs] = arr[rhs]; 
-    arr[rhs] = temp;   
-}
-
-function swapS(lhs, rhs){
     let temp = arr[lhs]; 
     arr[lhs] = arr[rhs]; 
     arr[rhs] = temp;   
@@ -171,7 +153,6 @@ async function quickSort(lo, hi){
  * merge sort  
  ****************/
 async function merge(lo, mid, hi){
-    //maybe animate the first and last bar and middle bar? 
 
     let bars = document.getElementsByClassName("bar");
     bars[lo].backgroundColor = "red"; 
@@ -180,29 +161,17 @@ async function merge(lo, mid, hi){
 
     let k; 
     let n1 = mid - lo + 1; 
-    let n2 = hi - mid; 
-    //console.log("lo mid hi n1 n2", lo, " , ", mid , " , ", hi, " , ", n1, " , ", n2);
-
-    //how to get array of certain size in js 
+    let n2 = hi - mid;  
 
     let left = Array.apply(null, Array(n1)).map(function(){}); 
     let right = Array.apply(null, Array(n2)).map(function(){}); 
 
-    //603708 
     for(let i = 0; i < n1; ++i){
-        //left.push(arr[lo + i]); 
         left[i] = arr[lo + i]; 
     }
     for(let i = 0; i < n2; ++i){
-        //right.push(arr[mid + 1 + i]); 
         right[i] = arr[mid + 1 + i];
     }
-    //console.log("left and right arr"); 
-    //console.log(left); 
-    //console.log(right); 
-
-
-    //need to animate the resizing of the bars here 
 
     let i = 0;  //for left 
     let j = 0;  //for right 
@@ -236,13 +205,11 @@ async function merge(lo, mid, hi){
         ++j; 
         ++k; 
     }
-    //console.log(arr); 
 }
 
 async function mergeSort(lo, hi){
     if(lo < hi){
         let mid = lo + Math.floor((hi - lo)/2); 
-        //console.log(lo, " , ", mid, " , ", hi , " low mid hi "); 
         await mergeSort(lo, mid); 
         await mergeSort(mid + 1, hi); 
         await merge(lo, mid, hi); 
@@ -290,13 +257,7 @@ async function heapSort(){
  * interface 
  ****************/
 async function sort(){
-
-    console.log("staring arr"); 
-    console.log(arr); 
-
     if(sortingMethod === -1){
-        //
-
         return;
     }
 
@@ -314,19 +275,13 @@ async function sort(){
             await heapSort(); 
             break; 
     }
-
-    console.log("ending arr"); 
-    console.log(arr); 
-
 }
 
 function initSort(sortAlgo){
-    console.log("init sort called"); 
     sortingMethod = sortAlgo; 
 
     let buttons = document.getElementsByTagName("button"); 
     for(let i = 0; i < buttons.length; ++i){
-        console.log("clearing buttons color")
         buttons[i].style.color = "aliceblue"; 
     }
 
@@ -378,5 +333,7 @@ quickSortButton.addEventListener("click", initQuickSort);
 mergeSortButton.addEventListener("click", initMergeSort); 
 heapSortButton.addEventListener("click", initHeapSort); 
 
-
-//style some text and make it go away 
+/*********************
+ * immediately called
+ ********************/
+reset()

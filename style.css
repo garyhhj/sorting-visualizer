@@ -1,6 +1,5 @@
 body {
     background-color: #383838;
-
 }
 
 .barContainer {
@@ -25,7 +24,7 @@ body {
     width: 10px;
     height: 80px;
 
-    transition: 200ms ease-in-out; 
+    transform: 200ms ease-in-out; 
 }
 
 .interface {
